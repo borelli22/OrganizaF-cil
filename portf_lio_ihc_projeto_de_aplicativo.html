@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabalho Avaliativo IHC — Design Thinking | IFPR Campus Palmas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        ifpr: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilo sutil para campos editáveis pelo estudante */
+        [contenteditable="true"]:focus {
+            outline: 2px dashed #10b981;
+            outline-offset: 4px;
+            border-radius: 6px;
+            background-color: rgba(16, 185, 129, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-ifpr-100 selection:text-ifpr-900">
+
+    <!-- Barra de Ajuda Rápida para o Estudante (Pode ser fechada na apresentação) -->
+    <div id="helper-banner" class="bg-slate-900 text-slate-200 text-xs sm:text-sm py-2.5 px-4 border-b border-slate-800">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2 text-center sm:text-left">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-ifpr-600 text-white">Pronto para Apresentação</span>
+                <span>Links do MIRO e Google Stitch configurados! Clique no seu nome para editar antes de apresentar.</span>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="openLinksModal()" class="px-3 py-1 rounded-lg bg-ifpr-600 hover:bg-ifpr-500 text-white font-medium transition cursor-pointer">
+                    Editar Links
+                </button>
+                <button onclick="document.getElementById('helper-banner').remove()" class="p-1 text-slate-400 hover:text-white rounded-lg cursor-pointer" title="Fechar barra para apresentação">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegação Superior Fixa -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-ifpr-700 text-white flex items-center justify-center font-display font-bold text-sm shadow-sm">
+                    IHC
+                </div>
+                <div>
+                    <span class="font-display font-bold text-slate-900 text-sm sm:text-base block leading-tight" contenteditable="true">OrganizaFácil App</span>
+                    <span class="text-[11px] text-slate-500 block">IFPR Campus Palmas • 2026</span>
+                </div>
+            </div>
+
+            <!-- Links de Navegação Desktop -->
+            <nav class="hidden lg:flex items-center gap-1 text-sm font-medium text-slate-600">
+                <a href="#empatia" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-ifpr-700 transition">1. Empatia</a>
+                <a href="#definicao" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-ifpr-700 transition">2. Definição</a>
+                <a href="#ideacao" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-ifpr-700 transition">3. Ideação</a>
+                <a href="#prototipacao" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-ifpr-700 transition">4. Prototipação</a>
+                <a href="#teste" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-ifpr-700 transition">5. Teste</a>
+                <a href="#acessibilidade" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-ifpr-700 transition">Acessibilidade</a>
+            </nav>
+
+            <!-- Botões Rápidos MIRO & Protótipo -->
+            <div class="flex items-center gap-2">
+                <a id="nav-miro-btn" href="https://miro.com/app/board/uXjVG-c8CO8=/?share_link_id=631330037122" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-900 font-semibold text-xs sm:text-sm transition shadow-xs">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                    <span>MIRO</span>
+                </a>
+                <a id="nav-proto-btn" href="https://stitch.google.com/projects/12085643560402356852" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-ifpr-700 hover:bg-ifpr-600 text-white font-semibold text-xs sm:text-sm transition shadow-xs">
+                    <i data-lucide="smartphone" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Protótipo</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION: Cabeçalho Acadêmico + Título do Trabalho + Processo de Design + Links -->
+    <section class="relative overflow-hidden bg-gradient-to-b from-ifpr-900 via-ifpr-800 to-slate-900 text-white py-16 sm:py-24">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+            <!-- Badges Institucionais -->
+            <div class="flex flex-wrap items-center gap-2 mb-6">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-ifpr-100 text-xs sm:text-sm font-medium">
+                    <i data-lucide="graduation-cap" class="w-4 h-4 text-ifpr-400"></i>
+                    Instituto Federal do Paraná (IFPR) — Campus Palmas
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-ifpr-500/20 border border-ifpr-400/30 text-ifpr-200 text-xs sm:text-sm font-medium">
+                    2º Ano • 2026 • Prof.ª Andreia Marini
+                </span>
+            </div>
+
+            <!-- Título do Trabalho -->
+            <div class="max-w-4xl">
+                <p class="text-ifpr-300 font-semibold tracking-wide uppercase text-xs sm:text-sm mb-2">
+                    Design de Interface Humano-Computador (IHC) — Portfólio de Projeto
+                </p>
+                <h1 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-4" contenteditable="true">
+                    OrganizaFácil: Aplicativo para Organização de Tarefas e Compromissos
+                </h1>
+                <p class="text-slate-200 text-base sm:text-xl leading-relaxed mb-6 max-w-3xl">
+                    Uma solução digital simples, prática e acessível projetada para ajudar estudantes e trabalhadores a gerenciarem suas rotinas, evitarem esquecimentos e reduzirem o estresse diário.
+                </p>
+
+                <!-- Identificação do Estudante e Processo de Design -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mb-8">
+                    <div class="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-4">
+                        <span class="text-xs text-ifpr-300 uppercase font-semibold block mb-1">Desenvolvido por (Estudante)</span>
+                        <span class="font-semibold text-white text-base block" contenteditable="true">[Clique aqui para inserir seu Nome Completo]</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-4">
+                        <span class="text-xs text-ifpr-300 uppercase font-semibold block mb-1">Processo de Design Utilizado</span>
+                        <span class="font-semibold text-white text-base flex items-center gap-2">
+                            <i data-lucide="compass" class="w-4 h-4 text-ifpr-400"></i>
+                            Design Thinking (5 Etapas)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Checklist Item: Link do MIRO e Link do Protótipo - Projeto -->
+                <div id="links-principais" class="flex flex-wrap items-center gap-4">
+                    <a id="hero-miro-link" href="https://miro.com/app/board/uXjVG-c8CO8=/?share_link_id=631330037122" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm sm:text-base transition shadow-lg">
+                        <i data-lucide="kanban" class="w-5 h-5"></i>
+                        <span>Acessar Quadro no MIRO</span>
+                        <i data-lucide="external-link" class="w-4 h-4 opacity-75"></i>
+                    </a>
+                    <a id="hero-proto-link" href="https://stitch.google.com/projects/12085643560402356852" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-ifpr-500 hover:bg-ifpr-400 text-white font-bold text-sm sm:text-base transition shadow-lg">
+                        <i data-lucide="smartphone" class="w-5 h-5"></i>
+                        <span>Acessar Protótipo do Projeto (Google Stitch)</span>
+                        <i data-lucide="external-link" class="w-4 h-4 opacity-85"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Visão Geral das 5 Etapas do Design Thinking -->
+            <div class="mt-14 pt-8 border-t border-white/15">
+                <p class="text-xs uppercase tracking-wider text-ifpr-300 font-semibold mb-4">Estrutura do Processo de Design Thinking Aplicado</p>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    <a href="#empatia" class="group bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl p-3.5 transition">
+                        <span class="text-xs font-bold text-ifpr-400 block">ETAPA 01</span>
+                        <span class="font-display font-bold text-white text-sm sm:text-base">Empatia</span>
+                    </a>
+                    <a href="#definicao" class="group bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl p-3.5 transition">
+                        <span class="text-xs font-bold text-ifpr-400 block">ETAPA 02</span>
+                        <span class="font-display font-bold text-white text-sm sm:text-base">Definição</span>
+                    </a>
+                    <a href="#ideacao" class="group bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl p-3.5 transition">
+                        <span class="text-xs font-bold text-ifpr-400 block">ETAPA 03</span>
+                        <span class="font-display font-bold text-white text-sm sm:text-base">Ideação</span>
+                    </a>
+                    <a href="#prototipacao" class="group bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl p-3.5 transition">
+                        <span class="text-xs font-bold text-ifpr-400 block">ETAPA 04</span>
+                        <span class="font-display font-bold text-white text-sm sm:text-base">Prototipação</span>
+                    </a>
+                    <a href="#teste" class="col-span-2 sm:col-span-1 group bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl p-3.5 transition">
+                        <span class="text-xs font-bold text-ifpr-400 block">ETAPA 05</span>
+                        <span class="font-display font-bold text-white text-sm sm:text-base">Teste</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-20">
+
+        <!-- ========================================================= -->
+        <!-- ETAPA 1 - EMPATIA                                         -->
+        <!-- ========================================================= -->
+        <section id="empatia" class="scroll-mt-24 space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-4 gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-ifpr-700 bg-ifpr-100 px-3 py-1 rounded-full">Etapa 1 — Design Thinking</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Empatia</h2>
+                </div>
+                <p class="text-sm text-slate-500">Compreendendo o contexto e as dores reais dos usuários</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Escolha do Problema (Justificativa) -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-ifpr-50 text-ifpr-700 flex items-center justify-center">
+                        <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-slate-900">1.1 Escolha do Problema e Justificativa</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Muitas pessoas, sejam <strong>estudantes, trabalhadores ou profissionais</strong>, acabam esquecendo tarefas, compromissos e prazos importantes no dia a dia. Isso acontece por falta de organização ou excesso de coisas para lembrar, o que pode causar <strong>estresse, perda de prazos e problemas</strong> na rotina pessoal, escolar e profissional.
+                    </p>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 text-sm text-slate-700">
+                        <strong class="text-slate-900 block mb-1">Impacto identificado:</strong>
+                        A sobrecarga mental de tentar memorizar todas as obrigações sem uma ferramenta simples gera ansiedade e queda de produtividade.
+                    </div>
+                </div>
+
+                <!-- Pesquisa para entender necessidades do usuário -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center">
+                        <i data-lucide="search" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-slate-900">1.2 Pesquisa de Necessidades do Usuário</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Sim, foi realizada uma investigação exploratória junto a colegas estudantes e trabalhadores para entender como organizam suas rotinas e por que abandonam aplicativos existentes.
+                    </p>
+                    <ul class="space-y-2.5 text-sm text-slate-700">
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-ifpr-600 shrink-0 mt-0.5"></i>
+                            <span><strong>Complexidade excessiva:</strong> Muitos apps têm dezenas de menus confusos que desmotivam o uso diário.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-ifpr-600 shrink-0 mt-0.5"></i>
+                            <span><strong>Necessidade de agilidade:</strong> Os usuários precisam anotar uma tarefa em poucos segundos antes que esqueçam.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-ifpr-600 shrink-0 mt-0.5"></i>
+                            <span><strong>Alertas confiáveis:</strong> Lembretes com horário definido são essenciais para não perder entregas e compromissos.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- ETAPA 2 - DEFINIÇÃO                                       -->
+        <!-- ========================================================= -->
+        <section id="definicao" class="scroll-mt-24 space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-4 gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-ifpr-700 bg-ifpr-100 px-3 py-1 rounded-full">Etapa 2 — Design Thinking</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Definição</h2>
+                </div>
+                <p class="text-sm text-slate-500">Síntese do problema, objetivos, matriz CSD, personas e jornada</p>
+            </div>
+
+            <!-- Objetivo + Definição do Problema + Benefícios -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3">
+                    <div class="inline-flex items-center gap-2 text-ifpr-700 font-bold text-sm">
+                        <i data-lucide="target" class="w-5 h-5"></i>
+                        <span>Objetivo do Projeto</span>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Criar um aplicativo que ajude as pessoas a organizarem suas tarefas e compromissos de forma <strong>simples e prática</strong>, oferecendo uma interface acessível para registrar tarefas, definir horários e receber notificações.
+                    </p>
+                </div>
+
+                <div class="bg-ifpr-900 text-white rounded-3xl p-6 shadow-xs space-y-3">
+                    <div class="inline-flex items-center gap-2 text-ifpr-300 font-bold text-sm">
+                        <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                        <span>Definição do Problema</span>
+                    </div>
+                    <p class="text-ifpr-50 text-sm leading-relaxed">
+                        “Como podemos ajudar estudantes e trabalhadores sobrecarregados a registrarem e acompanharem seus compromissos diários de maneira rápida e intuitiva, evitando esquecimentos e reduzindo o estresse?”
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3">
+                    <div class="inline-flex items-center gap-2 text-emerald-700 font-bold text-sm">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        <span>Benefícios Esperados</span>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Possibilidade de anotar tarefas, organizar compromissos e receber lembretes pontuais — evitando esquecimentos, melhorando a produtividade e deixando a rotina mais leve e organizada.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Matriz CSD (Certezas, Suposições e Dúvidas) -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+                <div>
+                    <h3 class="font-display text-xl font-bold text-slate-900">2.1 Matriz CSD (Certezas, Suposições e Dúvidas)</h3>
+                    <p class="text-sm text-slate-500 mt-1">Alinhamento estratégico do que já sabemos e do que precisamos validar com os usuários.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- Certezas -->
+                    <div class="rounded-2xl bg-emerald-50/70 border border-emerald-200 p-5 space-y-3">
+                        <div class="flex items-center gap-2 font-display font-bold text-emerald-900">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">C</span>
+                            <span>Certezas</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-emerald-950/90 list-disc pl-4">
+                            <li>Estudantes e trabalhadores lidam com muitos prazos simultâneos.</li>
+                            <li>O esquecimento de tarefas gera estresse e prejuízos no dia a dia.</li>
+                            <li>O uso do smartphone é constante no público-alvo.</li>
+                            <li>Notificações ajudam a lembrar compromissos no horário certo.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Suposições -->
+                    <div class="rounded-2xl bg-amber-50/70 border border-amber-200 p-5 space-y-3">
+                        <div class="flex items-center gap-2 font-display font-bold text-amber-900">
+                            <span class="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center text-xs">S</span>
+                            <span>Suposições</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-amber-950/90 list-disc pl-4">
+                            <li>Uma interface minimalista aumentará a frequência de uso do app.</li>
+                            <li>Usuários preferem cadastrar uma tarefa em até 3 passos simples.</li>
+                            <li>Separar tarefas por data/horário facilita a visualização da rotina.</li>
+                            <li>A maioria das pessoas abandona apps complexos por falta de tempo.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Dúvidas -->
+                    <div class="rounded-2xl bg-sky-50/70 border border-sky-200 p-5 space-y-3">
+                        <div class="flex items-center gap-2 font-display font-bold text-sky-900">
+                            <span class="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center text-xs">D</span>
+                            <span>Dúvidas</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-sky-950/90 list-disc pl-4">
+                            <li>Com quanto tempo de antecedência o usuário prefere ser notificado?</li>
+                            <li>Quais filtros de ordenação são mais úteis (horário ou prioridade)?</li>
+                            <li>Os usuários sentem falta de categorias visuais (Estudo, Trabalho, Pessoal)?</li>
+                            <li>Como tornar o app intuitivo até para quem tem pouca afinidade digital?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personas e Jornada do Usuário -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Personas -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-5">
+                    <h3 class="font-display text-xl font-bold text-slate-900">2.2 Personas do Projeto</h3>
+
+                    <!-- Persona 1 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-full bg-ifpr-700 text-white font-bold flex items-center justify-center shrink-0">LM</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Lucas Mendes, 17 anos</h4>
+                                <p class="text-xs text-slate-500">Estudante do Ensino Médio Técnico • IFPR</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600">
+                            <strong>Perfil e Dores:</strong> Tem várias disciplinas, trabalhos em grupo e datas de provas. Costuma anotar coisas em papéis soltos ou tentar decorar, acabando por esquecer entregas importantes na véspera.
+                        </p>
+                        <p class="text-xs font-medium text-ifpr-700">Objetivo: Ver rapidamente o que precisa entregar hoje e receber alertas antes do prazo.</p>
+                    </div>
+
+                    <!-- Persona 2 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-full bg-slate-800 text-white font-bold flex items-center justify-center shrink-0">CS</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Camila Souza, 32 anos</h4>
+                                <p class="text-xs text-slate-500">Assistente Administrativa e Mãe</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600">
+                            <strong>Perfil e Dores:</strong> Divide o dia entre reuniões de trabalho, pagamentos de contas e compromissos familiares. Sente-se estressada quando esquece um horário importante por falta de um lembrete claro.
+                        </p>
+                        <p class="text-xs font-medium text-ifpr-700">Objetivo: Ter um aplicativo direto, sem burocracia, com avisos confiáveis no celular.</p>
+                    </div>
+                </div>
+
+                <!-- Jornada do Usuário -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-5">
+                    <h3 class="font-display text-xl font-bold text-slate-900">2.3 Jornada do Usuário (Cenário Típico)</h3>
+                    <p class="text-sm text-slate-500">Acompanhando a experiência do usuário desde o surgimento da tarefa até sua conclusão.</p>
+
+                    <div class="relative border-l-2 border-ifpr-200 ml-3 space-y-5 py-1">
+                        <div class="pl-5 relative">
+                            <span class="w-3 h-3 rounded-full bg-ifpr-600 absolute -left-[7px] top-1.5"></span>
+                            <span class="text-xs font-bold uppercase text-ifpr-700">1. Descoberta da Tarefa</span>
+                            <p class="text-sm text-slate-600">O professor anuncia um trabalho ou surge um compromisso de trabalho com data e hora marcadas.</p>
+                        </div>
+                        <div class="pl-5 relative">
+                            <span class="w-3 h-3 rounded-full bg-ifpr-600 absolute -left-[7px] top-1.5"></span>
+                            <span class="text-xs font-bold uppercase text-ifpr-700">2. Registro Rápido no App</span>
+                            <p class="text-sm text-slate-600">O usuário abre o OrganizaFácil, toca em “+ Nova Tarefa”, digita o título, escolhe data/horário e salva em segundos.</p>
+                        </div>
+                        <div class="pl-5 relative">
+                            <span class="w-3 h-3 rounded-full bg-ifpr-600 absolute -left-[7px] top-1.5"></span>
+                            <span class="text-xs font-bold uppercase text-ifpr-700">3. Notificação e Lembrete</span>
+                            <p class="text-sm text-slate-600">No horário programado, o aplicativo envia uma notificação clara na tela do celular, evitando o esquecimento.</p>
+                        </div>
+                        <div class="pl-5 relative">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500 absolute -left-[7px] top-1.5"></span>
+                            <span class="text-xs font-bold uppercase text-emerald-700">4. Conclusão e Alívio</span>
+                            <p class="text-sm text-slate-600">O usuário marca a tarefa como concluída, visualiza seu progresso e sente controle sobre a rotina.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- ETAPA 3 - IDEAÇÃO                                         -->
+        <!-- ========================================================= -->
+        <section id="ideacao" class="scroll-mt-24 space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-4 gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-ifpr-700 bg-ifpr-100 px-3 py-1 rounded-full">Etapa 3 — Design Thinking</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Ideação</h2>
+                </div>
+                <p class="text-sm text-slate-500">Geração de ideias, planejamento, fluxo de tarefas e arquitetura de telas</p>
+            </div>
+
+            <!-- Crazy 8 e Plano de Ação -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Crazy 8 -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center">
+                            <i data-lucide="zap" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-slate-900">3.1 Dinâmica Crazy 8</h3>
+                            <p class="text-xs text-slate-500">8 ideias rápidas esboçadas em 8 minutos para resolver o problema</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <span class="font-bold text-ifpr-700 block mb-1">01. Lista Hoje</span>
+                            Visão limpa apenas das tarefas do dia atual.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <span class="font-bold text-ifpr-700 block mb-1">02. Botão Rápido</span>
+                            Botão flutuante “+” sempre acessível no polegar.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <span class="font-bold text-ifpr-700 block mb-1">03. Alerta Sonoro</span>
+                            Notificação push com opção “Adiar 15 min”.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <span class="font-bold text-ifpr-700 block mb-1">04. Cores de Status</span>
+                            Verde (concluída), Azul (agendada), Vermelho (atrasada).
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <span class="font-bold text-ifpr-700 block mb-1">05. Check Único</span>
+                            Um toque para riscar e concluir a tarefa.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <span class="font-bold text-ifpr-700 block mb-1">06. Categorias</span>
+                            Tags simples: Estudo, Trabalho e Pessoal.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <span class="font-bold text-ifpr-700 block mb-1">07. Resumo Diário</span>
+                            Contagem de tarefas pendentes no topo.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <span class="font-bold text-ifpr-700 block mb-1">08. Modo Claro/Escuro</span>
+                            Conforto visual em qualquer horário.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plano de Ação (Escopo) -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-ifpr-50 text-ifpr-700 flex items-center justify-center">
+                            <i data-lucide="list-checks" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-slate-900">3.2 Plano de Ação e Escopo</h3>
+                            <p class="text-xs text-slate-500">Etapas definidas para execução e validação do projeto</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        De acordo com o escopo definido: <strong>inicialmente foi desenvolvido um protótipo funcional do aplicativo</strong> focando nas funcionalidades essenciais (cadastro, listagem e notificações). Em seguida, <strong>o protótipo foi submetido a testes com usuários reais</strong> para coletar feedback e aplicar melhorias de interface.
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                            <span class="font-medium text-slate-800">Fase 1: Estruturação no MIRO (Empatia e Definição)</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Concluído</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                            <span class="font-medium text-slate-800">Fase 2: Prototipação de Telas no Google Stitch</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Concluído</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                            <span class="font-medium text-slate-800">Fase 3: Teste de Usabilidade e Ajustes Finais</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Concluído</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fluxo de Tarefas, Ordenação e Identificação de Telas -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+                <h3 class="font-display text-xl font-bold text-slate-900">3.3 Fluxo de Tarefas, Ordenação e Telas do App</h3>
+
+                <!-- Fluxo Linear Visual -->
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-3">Fluxo Principal do Usuário</span>
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+                        <span class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-800 border border-slate-200">1. Abrir App (Tela Inicial)</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-400"></i>
+                        <span class="px-4 py-2.5 rounded-xl bg-ifpr-50 text-ifpr-800 border border-ifpr-200">2. Visualizar Lista Ordenada</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-400"></i>
+                        <span class="px-4 py-2.5 rounded-xl bg-ifpr-600 text-white shadow-xs">3. Tocar em “+ Nova Tarefa”</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-400"></i>
+                        <span class="px-4 py-2.5 rounded-xl bg-ifpr-50 text-ifpr-800 border border-ifpr-200">4. Definir Título, Data e Hora</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-400"></i>
+                        <span class="px-4 py-2.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200">5. Receber Notificação e Concluir</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <!-- Ordenação para Lista de Tarefas -->
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                        <h4 class="font-display font-bold text-slate-900 flex items-center gap-2">
+                            <i data-lucide="arrow-up-down" class="w-4 h-4 text-ifpr-700"></i>
+                            Critério de Ordenação da Lista de Tarefas
+                        </h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Para evitar poluição visual e destacar o que é urgente, a lista segue uma ordenação inteligente em três níveis:
+                        </p>
+                        <ol class="list-decimal pl-5 text-sm text-slate-700 space-y-1">
+                            <li><strong>Ordem Cronológica (Horário mais próximo):</strong> Compromissos do dia aparecem no topo do mais cedo para o mais tarde.</li>
+                            <li><strong>Status de Pendência:</strong> Tarefas pendentes ficam em destaque acima das tarefas já concluídas.</li>
+                            <li><strong>Filtro por Período:</strong> Abas rápidas para alternar entre <em>“Hoje”</em>, <em>“Próximos Dias”</em> e <em>“Concluídas”</em>.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Identificação de Telas do App -->
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                        <h4 class="font-display font-bold text-slate-900 flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4 text-ifpr-700"></i>
+                            Identificação das Telas do Aplicativo
+                        </h4>
+                        <ul class="text-sm text-slate-700 space-y-2">
+                            <li><strong>Tela 01 — Boas-vindas / Início:</strong> Apresentação rápida e acesso direto às tarefas do dia.</li>
+                            <li><strong>Tela 02 — Painel de Tarefas (Home):</strong> Lista organizada por horário, resumo diário e botão flutuante de criação.</li>
+                            <li><strong>Tela 03 — Nova Tarefa / Compromisso:</strong> Formulário limpo com título, data, horário, categoria e ativação de alerta.</li>
+                            <li><strong>Tela 04 — Detalhes e Notificação:</strong> Visualização do lembrete, opção de editar, adiar ou marcar como concluído.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- ETAPA 4 - PROTOTIPAÇÃO                                    -->
+        <!-- ========================================================= -->
+        <section id="prototipacao" class="scroll-mt-24 space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-4 gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-ifpr-700 bg-ifpr-100 px-3 py-1 rounded-full">Etapa 4 — Design Thinking</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Prototipação</h2>
+                    <p class="text-sm text-slate-500 mt-1">Apresentação das telas desenvolvidas no Google Stitch e acesso direto ao protótipo</p>
+                </div>
+
+                <!-- Checklist Item: Link do Protótipo - Projeto -->
+                <a id="section-proto-link" href="https://stitch.google.com/projects/12085643560402356852" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-ifpr-700 hover:bg-ifpr-600 text-white font-bold text-sm transition shadow-sm shrink-0">
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                    <span>Abrir Protótipo no Google Stitch</span>
+                </a>
+            </div>
+
+            <!-- Representação Visual das Telas do Protótipo (Média/Alta Fidelidade) -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="font-display text-lg font-bold text-slate-900">4.1 Estrutura Visual das Telas Principais (OrganizaFácil)</h3>
+                        <p class="text-sm text-slate-500">Wireframes e telas principais concebidas para facilitar a leitura, o cadastro e os lembretes.</p>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                        Protótipo Ativo no Google Stitch
+                    </span>
+                </div>
+
+                <!-- Grid com 3 Mockups de Celular Ilustrando o App -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                    <!-- Tela 1: Lista de Tarefas -->
+                    <div class="bg-slate-100 rounded-3xl p-4 border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-slate-500 uppercase mb-3">Tela 01 — Lista do Dia</span>
+                        <div class="w-full max-w-[260px] bg-white rounded-[28px] border-4 border-slate-800 p-4 shadow-md space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">Quinta-feira</span>
+                                    <span class="font-display font-bold text-slate-900 text-sm">Minhas Tarefas</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-full bg-ifpr-100 text-ifpr-800 text-[10px] font-bold">3 hoje</span>
+                            </div>
+                            <div class="flex gap-1 text-[10px] font-semibold">
+                                <span class="px-2.5 py-1 rounded-lg bg-ifpr-700 text-white">Hoje</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">Semana</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">Feitas</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-center gap-2">
+                                    <div class="w-4 h-4 rounded-md bg-ifpr-600 text-white flex items-center justify-center text-[10px]">✓</div>
+                                    <div class="line-through text-slate-400 text-xs">
+                                        <span class="block font-medium">Revisar slide de IHC</span>
+                                        <span class="text-[10px]">08:00 • Estudo</span>
+                                    </div>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-white border border-slate-200 flex items-center gap-2 shadow-2xs">
+                                    <div class="w-4 h-4 rounded-md border-2 border-ifpr-600"></div>
+                                    <div class="text-xs">
+                                        <span class="block font-bold text-slate-800">Apresentar Trabalho IHC</span>
+                                        <span class="text-[10px] text-ifpr-700 font-medium">09:30 • Alerta ativo</span>
+                                    </div>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-white border border-slate-200 flex items-center gap-2 shadow-2xs">
+                                    <div class="w-4 h-4 rounded-md border-2 border-slate-300"></div>
+                                    <div class="text-xs">
+                                        <span class="block font-bold text-slate-800">Entregar lista de exercícios</span>
+                                        <span class="text-[10px] text-slate-500">18:00 • Pessoal</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-1 flex justify-end">
+                                <span class="w-9 h-9 rounded-full bg-ifpr-700 text-white flex items-center justify-center font-bold text-lg shadow-sm">+</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tela 2: Cadastrar Tarefa -->
+                    <div class="bg-slate-100 rounded-3xl p-4 border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-slate-500 uppercase mb-3">Tela 02 — Nova Tarefa</span>
+                        <div class="w-full max-w-[260px] bg-white rounded-[28px] border-4 border-slate-800 p-4 shadow-md space-y-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-400">←</span>
+                                <span class="font-display font-bold text-slate-900 text-sm">Novo Compromisso</span>
+                            </div>
+                            <div class="space-y-2.5 text-left">
+                                <div>
+                                    <span class="text-[10px] font-bold text-slate-500 block mb-1">Título da Tarefa</span>
+                                    <div class="px-2.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 font-medium">
+                                        Reunião de grupo
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <span class="text-[10px] font-bold text-slate-500 block mb-1">Data</span>
+                                        <div class="px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-700">
+                                            20/11/2026
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] font-bold text-slate-500 block mb-1">Horário</span>
+                                        <div class="px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-700">
+                                            14:00
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-2 rounded-xl bg-ifpr-50 border border-ifpr-200">
+                                    <span class="text-[11px] font-semibold text-ifpr-900">Ativar Notificação</span>
+                                    <span class="w-7 h-4 rounded-full bg-ifpr-600 inline-block relative">
+                                        <span class="w-3 h-3 rounded-full bg-white absolute right-0.5 top-0.5"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="pt-1">
+                                <div class="w-full py-2 rounded-xl bg-ifpr-700 text-white text-center text-xs font-bold">
+                                    Salvar Tarefa
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tela 3: Notificação e Lembrete -->
+                    <div class="bg-slate-100 rounded-3xl p-4 border border-slate-200 flex flex-col items-center">
+                        <span class="text-xs font-bold text-slate-500 uppercase mb-3">Tela 03 — Lembrete Ativo</span>
+                        <div class="w-full max-w-[260px] bg-slate-900 text-white rounded-[28px] border-4 border-slate-800 p-4 shadow-md flex flex-col justify-between min-h-[275px]">
+                            <div class="text-center pt-2">
+                                <span class="text-2xl font-display font-bold block">13:45</span>
+                                <span class="text-[10px] text-slate-400">15 min antes do compromisso</span>
+                            </div>
+                            <div class="bg-white text-slate-900 rounded-2xl p-3 shadow-lg space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-bold text-ifpr-700 uppercase">OrganizaFácil • Agora</span>
+                                    <span class="w-2 h-2 rounded-full bg-ifpr-500"></span>
+                                </div>
+                                <p class="text-xs font-bold leading-snug">Lembrete: Reunião de grupo às 14:00</p>
+                                <div class="grid grid-cols-2 gap-1.5 pt-1 text-[10px] font-bold text-center">
+                                    <span class="py-1.5 rounded-lg bg-slate-100 text-slate-700">Adiar 10m</span>
+                                    <span class="py-1.5 rounded-lg bg-ifpr-600 text-white">Concluir</span>
+                                </div>
+                            </div>
+                            <div class="text-center text-[10px] text-slate-400">
+                                Notificação clara e ação rápida
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card de Acesso Direto ao Link do Protótipo - Projeto -->
+                <div class="p-5 rounded-2xl bg-ifpr-50 border border-ifpr-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3 text-center sm:text-left">
+                        <div class="w-11 h-11 rounded-2xl bg-ifpr-700 text-white flex items-center justify-center shrink-0">
+                            <i data-lucide="mouse-pointer-click" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-display font-bold text-ifpr-950 text-base">Link do Protótipo — Projeto (Google Stitch)</h4>
+                            <p class="text-xs sm:text-sm text-ifpr-800 break-all">https://stitch.google.com/projects/12085643560402356852</p>
+                        </div>
+                    </div>
+                    <a href="https://stitch.google.com/projects/12085643560402356852" target="_blank" rel="noopener noreferrer"
+                       class="px-5 py-2.5 rounded-xl bg-ifpr-700 hover:bg-ifpr-800 text-white font-bold text-sm transition shrink-0 inline-flex items-center gap-2">
+                        <span>Testar Protótipo Interativo</span>
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- ETAPA 5 - TESTE DE USABILIDADE                            -->
+        <!-- ========================================================= -->
+        <section id="teste" class="scroll-mt-24 space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-4 gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-ifpr-700 bg-ifpr-100 px-3 py-1 rounded-full">Etapa 5 — Design Thinking</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Teste de Usabilidade</h2>
+                </div>
+                <p class="text-sm text-slate-500">Validação prática com usuários e análise dos resultados obtidos</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Realização do Teste de Usabilidade -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-slate-900">5.1 Como foi Realizado o Teste</h3>
+                            <p class="text-xs text-slate-500">Aplicação do pedido de validação junto aos participantes</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Convidamos colegas estudantes e usuários potenciais com o pedido de testarem a ideia do aplicativo e sugerirem melhorias. Durante o teste com o protótipo, cada participante recebeu <strong>3 missões práticas</strong> sem ajuda prévia:
+                    </p>
+                    <ul class="space-y-2 text-sm text-slate-700 bg-slate-50 p-4 rounded-2xl border border-slate-200/70">
+                        <li><strong>Missão 1:</strong> Localizar na tela inicial qual é o próximo compromisso agendado para hoje.</li>
+                        <li><strong>Missão 2:</strong> Cadastrar uma nova tarefa (“Entregar trabalho de IHC”) definindo data, horário e lembrete.</li>
+                        <li><strong>Missão 3:</strong> Marcar uma tarefa existente como concluída na lista.</li>
+                    </ul>
+                </div>
+
+                <!-- Análise sobre os resultados dos testes -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                            <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-slate-900">5.2 Análise sobre os Resultados dos Testes</h3>
+                            <p class="text-xs text-slate-500">Aprendizados e melhorias identificadas após observação</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200">
+                            <span class="font-display text-xl font-extrabold text-emerald-800 block">100%</span>
+                            <span class="text-[11px] text-emerald-900 font-medium">Concluíram as tarefas</span>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-blue-50 border border-blue-200">
+                            <span class="font-display text-xl font-extrabold text-blue-800 block">&lt; 20s</span>
+                            <span class="text-[11px] text-blue-900 font-medium">Tempo médio de cadastro</span>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200">
+                            <span class="font-display text-xl font-extrabold text-amber-800 block">4.8 / 5</span>
+                            <span class="text-[11px] text-amber-900 font-medium">Facilidade percebida</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 text-sm text-slate-600 pt-1">
+                        <p>
+                            <strong class="text-slate-900">Pontos Positivos:</strong> Os usuários elogiaram a interface limpa, a rapidez para adicionar uma tarefa e a clareza das notificações.
+                        </p>
+                        <p>
+                            <strong class="text-slate-900">Melhorias Aplicadas pós-teste:</strong> Aumentamos o contraste e o tamanho do botão flutuante “+” para facilitar o toque com uma mão e deixamos a opção de ativar lembrete marcada por padrão.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- RECURSOS DE ACESSIBILIDADE                                -->
+        <!-- ========================================================= -->
+        <section id="acessibilidade" class="scroll-mt-24 space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-3 py-1 rounded-full">Inclusão e IHC</span>
+                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Aplicação de Recursos de Acessibilidade</h2>
+                <p class="text-sm text-slate-500 mt-1">Diretrizes aplicadas para garantir que o aplicativo seja simples e acessível para qualquer pessoa</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
+                        <i data-lucide="contrast" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-slate-900 text-base">Alto Contraste Visual</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Combinação de cores com alto contraste entre texto e fundo, facilitando a leitura para pessoas com baixa visão ou daltonismo.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                        <i data-lucide="type" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-slate-900 text-base">Tipografia Legível</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Fontes sem serifa modernas, tamanhos hierárquicos claros e espaçamento adequado para evitar cansaço visual.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+                        <i data-lucide="hand" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-slate-900 text-base">Áreas de Toque Amplas</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Botões e caixas de seleção com tamanho mínimo adequado (44px+) e bom espaçamento para evitar toques acidentais.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+                        <i data-lucide="volume-2" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-slate-900 text-base">Feedback Multimodal</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Alertas que combinam aviso visual, texto descritivo claro (compatível com leitores de tela) e sinal sonoro/vibração.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- CONSIDERAÇÕES FINAIS                                      -->
+        <!-- ========================================================= -->
+        <section id="consideracoes" class="scroll-mt-24">
+            <div class="bg-gradient-to-br from-slate-900 to-ifpr-950 text-white rounded-3xl p-6 sm:p-10 shadow-md space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-ifpr-300 text-xs font-bold uppercase">
+                    <i data-lucide="award" class="w-4 h-4"></i>
+                    <span>Síntese do Aprendizado</span>
+                </div>
+                <h2 class="font-display text-2xl sm:text-3xl font-extrabold">Considerações Finais</h2>
+                <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+                    O desenvolvimento do projeto <strong>OrganizaFácil</strong> ao longo da disciplina de Design de Interface Humano-Computador (IHC) demonstrou na prática como o processo de <strong>Design Thinking</strong> transforma um problema comum do cotidiano — o esquecimento de tarefas e compromissos — em uma solução centrada nas reais necessidades das pessoas.
+                </p>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    Desde a etapa de Empatia e estruturação no MIRO até a criação do protótipo no Google Stitch e realização dos testes de usabilidade, ficou evidente que uma boa interface não precisa ser complexa: simplicidade, acessibilidade e feedback claro são fundamentais para melhorar a produtividade e o bem-estar dos usuários.
+                </p>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- AVALIAÇÃO FINAL / PARECER E CONCEITO FINAL                -->
+        <!-- ========================================================= -->
+        <section id="avaliacao-final" class="scroll-mt-24">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-dashed border-slate-300 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Espaço Reservado à Avaliação Docente</span>
+                        <h2 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">Avaliação Final / Parecer e Conceito Final</h2>
+                    </div>
+                    <span class="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl">
+                        Prof.ª Andreia Marini • IHC 2026
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-slate-50 rounded-2xl p-5 border border-slate-200/80 space-y-2">
+                        <span class="text-xs font-bold uppercase text-slate-500 block">Avaliação Final / Parecer da Professora</span>
+                        <p class="text-sm text-slate-600 italic min-h-[72px]" contenteditable="true">
+                            [Espaço destinado ao parecer avaliativo sobre a apresentação, documentação no MIRO, protótipo e atendimento ao checklist de IHC.]
+                        </p>
+                    </div>
+                    <div class="bg-ifpr-50 rounded-2xl p-5 border border-ifpr-200 flex flex-col justify-between">
+                        <span class="text-xs font-bold uppercase text-ifpr-800 block">Conceito Final</span>
+                        <div class="my-3 text-center">
+                            <span class="font-display text-3xl font-extrabold text-ifpr-900" contenteditable="true">—</span>
+                        </div>
+                        <span class="text-[11px] text-ifpr-700 text-center block">3º Trimestre • IFPR Campus Palmas</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-white border-t border-slate-200 py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <div>
+                <span class="font-display font-bold text-slate-800">IFPR — Instituto Federal do Paraná (Campus Palmas)</span>
+                <span class="block text-xs mt-0.5">Componente Curricular: Design de Interface Humano-Computador (IHC) • 2º Ano • 2026</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-xs font-semibold">
+                <a href="https://miro.com/app/board/uXjVG-c8CO8=/?share_link_id=631330037122" target="_blank" rel="noopener noreferrer"
+                   class="text-amber-700 hover:underline inline-flex items-center gap-1">
+                    <span>Quadro no MIRO</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
+                <span class="text-slate-300">•</span>
+                <a href="https://stitch.google.com/projects/12085643560402356852" target="_blank" rel="noopener noreferrer"
+                   class="text-ifpr-700 hover:underline inline-flex items-center gap-1">
+                    <span>Protótipo no Google Stitch</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal para Editar Links do MIRO e Protótipo -->
+    <div id="links-modal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-slate-200">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-display text-lg font-bold text-slate-900">Links do Projeto</h3>
+                <button onclick="closeLinksModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-500 mb-4">
+                Os links oficiais do MIRO e do Google Stitch já estão aplicados na página. Você pode alterá-los abaixo caso necessário.
+            </p>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Link do Quadro no MIRO</label>
+                    <input id="input-miro-url" type="url" value="https://miro.com/app/board/uXjVG-c8CO8=/?share_link_id=631330037122"
+                           class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-ifpr-600">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Link do Protótipo — Projeto (Google Stitch)</label>
+                    <input id="input-proto-url" type="url" value="https://stitch.google.com/projects/12085643560402356852"
+                           class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-ifpr-600">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button onclick="closeLinksModal()" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 cursor-pointer">
+                        Cancelar
+                    </button>
+                    <button onclick="saveLinks()" class="px-4 py-2 rounded-xl text-sm font-bold bg-ifpr-700 hover:bg-ifpr-800 text-white cursor-pointer">
+                        Aplicar Links
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de Ícones e Interatividade -->
+    <script>
+        // Inicializa os ícones Lucide
+        lucide.createIcons();
+
+        function openLinksModal() {
+            document.getElementById('links-modal').classList.remove('hidden');
+        }
+
+        function closeLinksModal() {
+            document.getElementById('links-modal').classList.add('hidden');
+        }
+
+        function saveLinks() {
+            const miroUrl = document.getElementById('input-miro-url').value.trim();
+            const protoUrl = document.getElementById('input-proto-url').value.trim();
+
+            if (miroUrl) {
+                document.getElementById('hero-miro-link').href = miroUrl;
+                document.getElementById('nav-miro-btn').href = miroUrl;
+            }
+
+            if (protoUrl) {
+                document.getElementById('hero-proto-link').href = protoUrl;
+                document.getElementById('nav-proto-btn').href = protoUrl;
+                document.getElementById('section-proto-link').href = protoUrl;
+            }
+
+            closeLinksModal();
+        }
+    </script>
+</body>
+</html>
